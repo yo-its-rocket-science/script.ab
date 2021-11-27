@@ -1,8 +1,8 @@
 import connexion
 import six
 
-from swagger_server.models.application import Application  # noqa: E501
-from swagger_server.models.company import Company  # noqa: E501
+from app.models.application import Application  # noqa: E501
+from app.models.company import Company  # noqa: E501
 from swagger_server import util
 
 
