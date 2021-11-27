@@ -21,7 +21,7 @@ def application_post(body):  # noqa: E501
     return 'do some magic!'
 
 
-def deleteapplication(id):  # noqa: E501
+def delete_application(id):  # noqa: E501
     """Delete application
 
      # noqa: E501
