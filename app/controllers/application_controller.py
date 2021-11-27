@@ -1,9 +1,12 @@
 import flask
+from flask import Blueprint
 import six
 
 from app.models.application import Application  # noqa: E501
 from app.models.company import Company  # noqa: E501
 from app import util
+
+routes = Blueprint("application_routes", __name__)
 
 
 def application_post(body):  # noqa: E501

@@ -1,38 +1,37 @@
 import flask
-import six
-
+from flask import Blueprint
+from flask.globals import request
 from app.models.user import User  # noqa: E501
-from app import util
 
 
-def create_user(body):  # noqa: E501
-    """Create user
-
-    This can only be done by the logged in user. # noqa: E501
-
-    :param body: Created user object
-    :type body: dict | bytes
-
-    :rtype: None
-    """
-    if flask.request.is_json:
-        body = User.from_dict(flask.request.get_json())  # noqa: E501
-    return 'do some magic!'
+routes = Blueprint("user_routes", __name__)
 
 
-def delete_user(username):  # noqa: E501
-    """Delete user
+@routes.route('/', methods=['POST', 'PUT'])
+def index():  # noqa: E501
+    if request.method == 'POST':
 
-    This can only be done by the logged in user. # noqa: E501
+        content = request.json
+        """Create user
 
-    :param username: The name that needs to be deleted
-    :type username: str
+        This can only be done by the logged in user. # noqa: E501
 
-    :rtype: None
-    """
-    return 'do some magic!'
+        :param body: Created user object
+        :type body: dict | bytes
+
+        :rtype: None
+        """
+
+        return 'create user'
+    elif request.method == 'PUT':
+
+        content = request.json
+        """Update user
+        """
+        return 'update user'
 
 
+@routes.route('/<username>', methods=['GET'])
 def get_user_by_name(username):  # noqa: E501
     """Get user by id
 
@@ -43,9 +42,10 @@ def get_user_by_name(username):  # noqa: E501
 
     :rtype: User
     """
-    return 'do some magic!'
+    return 'get user'
 
 
+@routes.route('/login', methods=['POST'])
 def login_user(username, password):  # noqa: E501
     """Logs user into the system
 
@@ -61,6 +61,7 @@ def login_user(username, password):  # noqa: E501
     return 'do some magic!'
 
 
+@routes.route('/logout', methods=['POST'])
 def logout_user():  # noqa: E501
     """Logs out current logged in user session
 
@@ -69,21 +70,4 @@ def logout_user():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
-
-
-def update_user(body, username):  # noqa: E501
-    """Updated user
-
-    This can only be done by the logged in user. # noqa: E501
-
-    :param body: Updated user object
-    :type body: dict | bytes
-    :param username: name that need to be updated
-    :type username: str
-
-    :rtype: None
-    """
-    if flask.request.is_json:
-        body = User.from_dict(flask.request.get_json())  # noqa: E501
     return 'do some magic!'

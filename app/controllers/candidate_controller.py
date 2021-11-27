@@ -1,8 +1,10 @@
 import flask
-import six
+from flask import Blueprint
 
 from app.models.candidate import Candidate  # noqa: E501
 from app import util
+
+routes = Blueprint("candidate_routes", __name__)
 
 
 def delete_candidate(id):  # noqa: E501

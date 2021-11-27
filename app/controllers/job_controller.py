@@ -1,8 +1,10 @@
 import flask
-import six
+from flask.blueprints import Blueprint
 
 from app.models.job import Job  # noqa: E501
 from app import util
+
+routes = Blueprint("job_routes", __name__)
 
 
 def delete_job(id):  # noqa: E501

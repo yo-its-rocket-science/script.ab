@@ -1,8 +1,9 @@
 import flask
-import six
-
+from flask import Blueprint
 from app.models.company import Company  # noqa: E501
 from app import util
+
+routes = Blueprint("company_routes", __name__)
 
 
 def add_company(body):  # noqa: E501
