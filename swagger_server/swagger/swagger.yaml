@@ -1,0 +1,714 @@
+openapi: 3.0.1
+info:
+  title: ScriptAB
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/rocketscience/ScriptAB/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:8080
+  description: local testing
+- url: https://script-ab.herokuapp.com/
+  description: endpoint
+tags:
+- name: user
+  description: Operations about user
+- name: candidate
+  description: Operation about candidates (people seeking jobs)
+- name: company
+  description: Operations about company (people seeking jobs)
+- name: job
+  description: Operations regarding company created job positions
+- name: application
+  description: Operations regarding applications to job postings (created on job posting
+    mapping candidates to job)
+paths:
+  /user:
+    post:
+      tags:
+      - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: create_user
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        default:
+          description: successful operation
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /user/login:
+    get:
+      tags:
+      - user
+      summary: Logs user into the system
+      operationId: login_user
+      parameters:
+      - name: username
+        in: query
+        description: The user name for login
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: password
+        in: query
+        description: The password for login in clear text
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              style: simple
+              explode: false
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/json:
+              schema:
+                type: string
+                x-content-type: application/json
+        "400":
+          description: Invalid username/password supplied
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /user/logout:
+    get:
+      tags:
+      - user
+      summary: Logs out current logged in user session
+      operationId: logout_user
+      responses:
+        default:
+          description: successful operation
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /user/{username}:
+    get:
+      tags:
+      - user
+      summary: Get user by id
+      operationId: get_user_by_name
+      parameters:
+      - name: username
+        in: path
+        description: 'The name that needs to be fetched. Use user1 for testing. '
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid username supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+    put:
+      tags:
+      - user
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: update_user
+      parameters:
+      - name: username
+        in: path
+        description: name that need to be updated
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated user object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "400":
+          description: Invalid user supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-codegen-request-body-name: body
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+    delete:
+      tags:
+      - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: delete_user
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "400":
+          description: Invalid username supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.user_controller
+  /candidate/{id}:
+    get:
+      tags:
+      - candidate
+      summary: get candidate by their id
+      operationId: get_candidate_by_id
+      parameters:
+      - name: id
+        in: path
+        description: id of candidate.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        "400":
+          description: Invalid username supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.candidate_controller
+    put:
+      tags:
+      - candidate
+      summary: Updated candidate
+      description: This can only be done by the logged in user.
+      operationId: update_candidate
+      parameters:
+      - name: id
+        in: path
+        description: id of candidate.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: Updated user object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Candidate'
+        required: true
+      responses:
+        "400":
+          description: Invalid user supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-codegen-request-body-name: body
+      x-openapi-router-controller: swagger_server.controllers.candidate_controller
+    delete:
+      tags:
+      - candidate
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: delete_candidate
+      parameters:
+      - name: id
+        in: path
+        description: id of candidate
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "400":
+          description: Invalid username supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.candidate_controller
+  /job:
+    post:
+      tags:
+      - job
+      summary: add job
+      operationId: job_post
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.job_controller
+  /job/{id}:
+    get:
+      tags:
+      - job
+      summary: get job by id
+      operationId: get_job_by_id
+      parameters:
+      - name: id
+        in: path
+        description: id of job.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        "400":
+          description: Invalid username supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.job_controller
+    put:
+      tags:
+      - job
+      operationId: putjob
+      parameters:
+      - name: id
+        in: path
+        description: id of job.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: Updated job object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Job'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.job_controller
+    delete:
+      tags:
+      - job
+      summary: Delete job
+      description: This can only be done by the logged in job.
+      operationId: delete_job
+      parameters:
+      - name: id
+        in: path
+        description: The job that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      responses:
+        "400":
+          description: Invalid job supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.job_controller
+  /company:
+    post:
+      tags:
+      - company
+      summary: add company
+      operationId: add_company
+      requestBody:
+        description: Updated user object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      responses:
+        "204":
+          description: Created
+      x-openapi-router-controller: swagger_server.controllers.company_controller
+  /company/{id}:
+    get:
+      tags:
+      - company
+      summary: Get candidate by id
+      operationId: get_company_by_id
+      parameters:
+      - name: id
+        in: path
+        description: The id that needs to be fetched.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        "400":
+          description: Invalid username supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.company_controller
+    put:
+      tags:
+      - company
+      operationId: put_company
+      parameters:
+      - name: id
+        in: path
+        description: id of Company.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: Updated Company object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.company_controller
+    delete:
+      tags:
+      - company
+      operationId: delete_company
+      parameters:
+      - name: id
+        in: path
+        description: id of Company.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "400":
+          description: Invalid
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.company_controller
+  /application:
+    post:
+      tags:
+      - application
+      summary: add appplication
+      operationId: application_post
+      requestBody:
+        description: Add application
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Application'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.application_controller
+  /application/{candidateid}:
+    get:
+      tags:
+      - application
+      summary: Get application by candidate id
+      operationId: getapplication_bycandidate_id
+      parameters:
+      - name: candidateid
+        in: path
+        description: The candidate id that needs to be fetched.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        "400":
+          description: Invalid username supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.application_controller
+  /application/{id}:
+    delete:
+      tags:
+      - application
+      summary: Delete application
+      operationId: deleteapplication
+      parameters:
+      - name: id
+        in: path
+        description: The application that needs to be deleted
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: number
+      responses:
+        "400":
+          description: Invalid application supplied
+          content: {}
+        "404":
+          description: User not found
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.application_controller
+  /skill:
+    get:
+      tags:
+      - skill
+      summary: get list of skills for company to select
+      operationId: skill_get
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Skill'
+                x-content-type: application/json
+      x-openapi-router-controller: swagger_server.controllers.skill_controller
+components:
+  schemas:
+    Skill:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+      example:
+        name: name
+        id: 1
+    Candidate:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+      example:
+        skills:
+        - name: name
+          id: 1
+        - name: name
+          id: 1
+        id: 0
+        userid: 6
+    Job:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        companyId:
+          type: integer
+          format: int32
+        title:
+          type: string
+        description:
+          type: string
+        workplaceType:
+          type: string
+          enum:
+          - Remote
+          - Hybird
+          - On-site
+        employmentType:
+          type: string
+        salary:
+          type: string
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+      example:
+        skills:
+        - name: name
+          id: 1
+        - name: name
+          id: 1
+        companyId: 6
+        employmentType: employmentType
+        description: description
+        id: 0
+        workplaceType: Remote
+        title: title
+        salary: salary
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        username:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        image:
+          type: string
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+        candidateId:
+          type: integer
+          format: int32
+        companyId:
+          type: integer
+          format: int32
+      example:
+        firstName: firstName
+        lastName: lastName
+        image: image
+        password: password
+        companyId: 5
+        userStatus: 6
+        phone: phone
+        id: 0
+        candidateId: 1
+        username: username
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        userid:
+          type: integer
+          format: int32
+        name:
+          type: string
+        size:
+          type: string
+        type:
+          type: string
+        image:
+          type: string
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+      example:
+        image: image
+        size: size
+        jobs:
+        - skills:
+          - name: name
+            id: 1
+          - name: name
+            id: 1
+          companyId: 6
+          employmentType: employmentType
+          description: description
+          id: 0
+          workplaceType: Remote
+          title: title
+          salary: salary
+        - skills:
+          - name: name
+            id: 1
+          - name: name
+            id: 1
+          companyId: 6
+          employmentType: employmentType
+          description: description
+          id: 0
+          workplaceType: Remote
+          title: title
+          salary: salary
+        name: name
+        id: 0
+        type: type
+        userid: 6
+    Application:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        jobid:
+          type: integer
+          format: int32
+        candidateid:
+          type: integer
+          format: int32
+        companyid:
+          type: integer
+          format: int32
+
