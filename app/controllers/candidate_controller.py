@@ -1,8 +1,8 @@
-import connexion
+import flask
 import six
 
-from swagger_server.models.candidate import Candidate  # noqa: E501
-from swagger_server import util
+from app.models.candidate import Candidate  # noqa: E501
+from app import util
 
 
 def delete_candidate(id):  # noqa: E501
@@ -43,6 +43,6 @@ def update_candidate(body, id):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = Candidate.from_dict(connexion.request.get_json())  # noqa: E501
+    if flask.request.is_json:
+        body = Candidate.from_dict(flask.request.get_json())  # noqa: E501
     return 'do some magic!'

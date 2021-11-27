@@ -1,8 +1,8 @@
-import connexion
+import flask
 import six
 
-from swagger_server.models.job import Job  # noqa: E501
-from swagger_server import util
+from app.models.job import Job  # noqa: E501
+from app import util
 
 
 def delete_job(id):  # noqa: E501
@@ -54,6 +54,6 @@ def putjob(body, id):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = Job.from_dict(connexion.request.get_json())  # noqa: E501
+    if flask.request.is_json:
+        body = Job.from_dict(flask.request.get_json())  # noqa: E501
     return 'do some magic!'

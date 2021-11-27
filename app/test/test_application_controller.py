@@ -5,9 +5,9 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.application import Application  # noqa: E501
-from swagger_server.models.company import Company  # noqa: E501
-from swagger_server.test import BaseTestCase
+from app.models.application import Application  # noqa: E501
+from app.models.company import Company  # noqa: E501
+from app.test import BaseTestCase
 
 
 class TestApplicationController(BaseTestCase):
@@ -44,7 +44,8 @@ class TestApplicationController(BaseTestCase):
         Get application by candidate id
         """
         response = self.client.open(
-            '/rocketscience/ScriptAB/1.0.0/application/{candidateid}'.format(candidateid=1.2),
+            '/rocketscience/ScriptAB/1.0.0/application/{candidateid}'.format(
+                candidateid=1.2),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

@@ -5,8 +5,8 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.job import Job  # noqa: E501
-from swagger_server.test import BaseTestCase
+from app.models.job import Job  # noqa: E501
+from app.test import BaseTestCase
 
 
 class TestJobController(BaseTestCase):
@@ -48,7 +48,7 @@ class TestJobController(BaseTestCase):
     def test_putjob(self):
         """Test case for putjob
 
-        
+
         """
         body = Job()
         response = self.client.open(

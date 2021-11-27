@@ -5,8 +5,8 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.company import Company  # noqa: E501
-from swagger_server.test import BaseTestCase
+from app.models.company import Company  # noqa: E501
+from app.test import BaseTestCase
 
 
 class TestCompanyController(BaseTestCase):
@@ -29,7 +29,7 @@ class TestCompanyController(BaseTestCase):
     def test_delete_company(self):
         """Test case for delete_company
 
-        
+
         """
         response = self.client.open(
             '/rocketscience/ScriptAB/1.0.0/company/{id}'.format(id=56),
@@ -51,7 +51,7 @@ class TestCompanyController(BaseTestCase):
     def test_put_company(self):
         """Test case for put_company
 
-        
+
         """
         body = Company()
         response = self.client.open(

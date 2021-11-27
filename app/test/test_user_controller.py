@@ -5,8 +5,8 @@ from __future__ import absolute_import
 from flask import json
 from six import BytesIO
 
-from swagger_server.models.user import User  # noqa: E501
-from swagger_server.test import BaseTestCase
+from app.models.user import User  # noqa: E501
+from app.test import BaseTestCase
 
 
 class TestUserController(BaseTestCase):
@@ -32,7 +32,8 @@ class TestUserController(BaseTestCase):
         Delete user
         """
         response = self.client.open(
-            '/rocketscience/ScriptAB/1.0.0/user/{username}'.format(username='username_example'),
+            '/rocketscience/ScriptAB/1.0.0/user/{username}'.format(
+                username='username_example'),
             method='DELETE')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -43,7 +44,8 @@ class TestUserController(BaseTestCase):
         Get user by id
         """
         response = self.client.open(
-            '/rocketscience/ScriptAB/1.0.0/user/{username}'.format(username='username_example'),
+            '/rocketscience/ScriptAB/1.0.0/user/{username}'.format(
+                username='username_example'),
             method='GET')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))
@@ -80,7 +82,8 @@ class TestUserController(BaseTestCase):
         """
         body = User()
         response = self.client.open(
-            '/rocketscience/ScriptAB/1.0.0/user/{username}'.format(username='username_example'),
+            '/rocketscience/ScriptAB/1.0.0/user/{username}'.format(
+                username='username_example'),
             method='PUT',
             data=json.dumps(body),
             content_type='*/*')

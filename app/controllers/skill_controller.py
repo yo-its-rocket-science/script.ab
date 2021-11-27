@@ -1,8 +1,8 @@
-import connexion
+import flask
 import six
 
-from swagger_server.models.skill import Skill  # noqa: E501
-from swagger_server import util
+from app.models.skill import Skill  # noqa: E501
+from app import util
 
 
 def skill_get():  # noqa: E501

@@ -1,9 +1,9 @@
-import connexion
+import flask
 import six
 
 from app.models.application import Application  # noqa: E501
 from app.models.company import Company  # noqa: E501
-from swagger_server import util
+from app import util
 
 
 def application_post(body):  # noqa: E501
@@ -16,8 +16,8 @@ def application_post(body):  # noqa: E501
 
     :rtype: None
     """
-    if connexion.request.is_json:
-        body = Application.from_dict(connexion.request.get_json())  # noqa: E501
+    if flask.request.is_json:
+        body = Application.from_dict(flask.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 
