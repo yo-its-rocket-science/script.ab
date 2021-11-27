@@ -1,0 +1,399 @@
+openapi: 3.0.1
+info:
+  title: ScriptAB
+  description: ''
+  version: 1.0.0
+tags:
+  - name: user
+    description: Operations about user
+  - name: candidate
+    description: Operation about candidates (people seeking jobs)
+  - name: company
+    description: Operations about company (people seeking jobs)
+paths:
+  /user:
+    summary: Operations about user
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      operationId: loginUser
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid username/password supplied
+          content: {}
+  /user/logout:
+    get:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      operationId: logoutUser
+      responses:
+        default:
+          description: successful operation
+          content: {}
+  /user/{username}:
+    get:
+      tags:
+        - user
+      summary: Get candidate by id
+      operationId: getUserByName
+      parameters:
+        - name: username
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username supplied
+          content: {}
+        '404':
+          description: User not found
+          content: {}
+    put:
+      tags:
+        - user
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: username
+          in: path
+          description: name that need to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Updated user object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '400':
+          description: Invalid user supplied
+          content: {}
+        '404':
+          description: User not found
+          content: {}
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid username supplied
+          content: {}
+        '404':
+          description: User not found
+          content: {}
+  /candidate/{id}:
+    get:
+      summary: get candidate by their id
+      description: ''
+      operationId: getCandidateById
+      parameters:
+        - name: id
+          in: path
+          description: id of candidate.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+        '400':
+          description: Invalid username supplied
+          content: {}
+        '404':
+          description: User not found
+          content: {}
+      tags:
+        - candidate
+    put:
+      tags:
+        - candidate
+      summary: Updated candidate
+      description: This can only be done by the logged in user.
+      operationId: updateCandidate
+      parameters:
+        - name: id
+          in: path
+          description: id of candidate.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Updated user object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Candidate'
+        required: true
+      responses:
+        '400':
+          description: Invalid user supplied
+          content: {}
+        '404':
+          description: User not found
+          content: {}
+      x-codegen-request-body-name: body
+    delete:
+      tags:
+        - candidate
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteCandidate
+      parameters:
+        - name: id
+          in: path
+          description: id of candidate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '400':
+          description: Invalid username supplied
+          content: {}
+        '404':
+          description: User not found
+          content: {}
+  /job:
+    post:
+      summary: add job
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - job
+  /job/{id}:
+    put:
+      summary: ''
+      description: ''
+      operationId: ''
+      parameters:
+        - name: id
+          in: path
+          description: id of job.
+          required: true
+          schema:
+            type: integer      
+      requestBody:
+        description: Updated job object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Job'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - job
+  /company:
+    put:
+      summary: add company
+      description: ''
+      operationId: addCompany
+      requestBody:
+        description: Updated user object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - company
+  /company/{id}:
+    get:
+      tags:
+        - company
+      summary: Get candidate by id
+      operationId: getCompanyById
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: Invalid username supplied
+          content: {}
+        '404':
+          description: User not found
+          content: {}
+
+components:
+  schemas:
+    Skill:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          
+    Candidate:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        skills:
+          type: array
+          items: 
+            $ref: '#/components/schemas/Skill'
+    Job:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        companyId:
+          type: integer
+          format: int32
+        title:
+          type: string
+        description:
+          type: string
+        workplaceType:
+          type: string
+          enum:
+            - Remote
+            - Hybird
+            - On-site
+        employmentType:
+          type: string
+        salary:
+          type: string
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+        candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Candidate'
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        username:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        image:
+          type: string
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        size:
+          type: string
+        type:
+          type: string
+        image:
+          type: string
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
