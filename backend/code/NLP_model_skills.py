@@ -85,6 +85,7 @@ def transcript_to_skills(proc_transcript_csv, skills_csv, course_csv):
 
 
 ##example usage
+#from NLP_model_skills import *
 #student_skills = transcript_to_skills(proc_transcript_csv='processed_transcript.csv', 
 #                     skills_csv='skills_v2.csv', 
 #                     course_csv='numbered_scrapeUC.csv')
